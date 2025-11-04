@@ -1,22 +1,45 @@
+# NOMBRE DEL WORKFLOW
 name: Build Linux Container Image and Push to ACR
 
+# EVENTOS QUE DISPARAN EL WORKFLOW
 on:
-  workflow_dispatch:
+  workflow_dispatch: # PERMITE EJECUTAR EL WORKFLOW MANUALMENTE DESDE GITHUB UI
 
+# DEFINICION DE LOS JOBS
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # PRIMER JOB: BUILD IMAGE
+  build-image:
+    runs-on: ubuntu-latest # MAQUINA DONDE SE EJECUTARA EL JOB (RUNNER)
+
+    # VARIABLES DE ENTORNO DISPONIBLES DURANTE LA EJECUCION
+    #env:
+    #  NODE_ENV: test
+    #  PORT: 3000
+
+    # SECCION DONDE SE DEFINEN CONFIGURACIONES PREDETERMINADAS Y SE PUEDEN
+    # APLICAR A TODOS LOS STEPS DENTRO DEL MISMO JOB / PUEDES CONFIGURARLO
+    # A NIVEL DE WORKFLOW (GLOBAL) APLICA A TODOS LOS JOBS DEL ARCHIVO
     defaults:
-      run:
-        shell: bash
-        working-directory: dotnet
+      run: # APLICAN A TODOS LOS PASOS QUE USAN "RUN:" DENTRO DEL MISMO JOB
+        shell: bash # INDICA CON QUE SHELL SE EJECUTARÁN LOS COMANDOS
+        working-directory: dotnet # DEFINE LA CARPETA DONDE SE EJECUTARÁN LOS COMANDOS (POR DEFECTO ES LA RAÍZ DEL REPO)
     steps:
-    - uses: actions/checkout@v2
+    # STEP 1: Checkout del código fuente
+    - name: Checkout del código
+      uses: actions/checkout@v4
+      # "USES" INDICA QUE USAMOS UNA ACCIÓN PREEXISTENTE DE GITHUB MARKETPLACE
+    
+    # STEP 2: 
     - uses: azure/docker-login@v1
-      with:
+      # if: always() # CONDICION OPCIONAL PARA EJECUTAR UN PASO SOLO SI SE CUMPLE ALGO
+      with: # PARAMETROS QUE SE PASAN A UNA ACCION
         login-server: cloudquicklabsacr.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-    - run: |
+    
+    # STEP 3:
+    - name: Construir la imagen y pushearla a Docker Hub
+      run: |
         docker build . -t cloudquicklabsacr.azurecr.io/myapp:${{ github.sha }}
         docker push cloudquicklabsacr.azurecr.io/myapp:${{ github.sha }}
+      # "RUN" EJECUTA EL COMANDO DIRECTAMENTE EN EL RUNNER

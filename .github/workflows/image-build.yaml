@@ -1,0 +1,30 @@
+name: Build Docker Image
+on:
+  push:
+    branches:
+      - main
+jobs:
+    build:
+      name: push docker image to docker hub
+      runs-on: ubuntu-latest
+      default:
+        run:
+          shell: bash
+          working-directory: source
+      steps:
+        - uses: actions/checkout@v2
+        - name: login to docker hub
+          id: docker-hub
+          env:
+            username: ${{secrets.DOCKERHUB_USERNAME}}
+            password: ${{secrets.DOCKERHUB_PASSWORD}}
+          run: |
+            docker login -u $username -p $password 
+        - name: build the docker image
+          id: build-docker-image
+          run: |
+            ls -la 
+            docker build . -t ${{secrets.DOCKERHUB_USERNAME}}/product-subgraph:${{ github.sha }}
+        - name: push the docker image
+          id: push-docker-image
+          run: docker push ${{secrets.DOCKERHUB_USERNAME}}/product-subgraph:${{ github.sha }}
