@@ -8,7 +8,7 @@ import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheContr
 const typeDefs = gql`${fs.readFileSync(new URL('./schema.graphql', import.meta.url), 'utf8')}`;
 
 const PRODUCTS = [
-  { code: 'P-100', name: 'Laptop Pro 15', description: 'Ultrabook 15"', category: 'Computers', currency: 'USD', price: 1499.99, updatedAt: '2025-10-01T10:00:00Z' },
+  { code: 'P-100', name: 'Laptop Pro 15', description: 'Ultrabook 15"', category: 'Computers', currency: 'USD', price: 1499.99, updatedAt: '2025-10-02T10:00:00Z' },
   { code: 'P-101', name: 'Mouse Ergo',     description: 'Mouse ergonómico', category: 'Accessories', currency: 'USD', price: 39.9,    updatedAt: '2025-10-02T09:20:00Z' },
   { code: 'P-102', name: 'Teclado MX',     description: 'Teclado mecánico', category: 'Accessories', currency: 'USD', price: 119.0,   updatedAt: '2025-10-02T12:30:00Z' },
   { code: 'P-103', name: 'Monitor 27"',    description: 'QHD 165Hz',        category: 'Displays',    currency: 'USD', price: 329.0,   updatedAt: '2025-10-03T08:15:00Z' },
