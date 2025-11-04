@@ -1,0 +1,29 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/federation/v2.11", import: ["@key"])
+
+enum CacheControlScope { 
+  PUBLIC 
+  PRIVATE 
+}
+
+directive @cacheControl(
+  maxAge: Int, 
+  scope: CacheControlScope, 
+  inheritMaxAge: Boolean
+)on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
+type Query {
+  product(code: ID!): Product
+  products: [Product!]!
+}
+
+"Entidad de producto, clave 'code'"
+type Product @key(fields: "code") @cacheControl(maxAge: 15) {
+  code: ID!
+  name: String!
+  description: String
+  category: String
+  currency: String!
+  price: Float!
+  updatedAt: String!
+}

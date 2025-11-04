@@ -1,0 +1,14 @@
+# Dependencias locales y caches
+node_modules
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Archivos de entorno y VCS
+.env
+.git
+.gitignore
+
+# SO / editor
+.DS_Store
+.vscode
